@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTDS常见问题自查助手 - 解决方案</title>
+    
+    <!-- 性能优化：提前建立与Render API的连接 -->
+    <link rel="preconnect" href="https://qa-platform-1-zat2.onrender.com">
+    <link rel="dns-prefetch" href="https://qa-platform-1-zat2.onrender.com">
+    
+    <!-- 引入Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- 引入配置文件 -->
+    <script src="config.js"></script>
+    
+    <style>
+        :root {
+            /* 现代企业风格 - 颜色系统 */
+            --color-primary: #3B82F6; /* Blue 500 */
+            --color-primary-light: #60A5FA; /* Blue 400 */
+            --color-primary-dark: #2563EB; /* Blue 600 */
+            --color-secondary: #64748B; /* Slate 500 */
+            --color-accent: #8B5CF6; /* Violet 500 */
+            --color-success: #10B981; /* Emerald 500 */
+            --color-error: #EF4444; /* Red 500 */
+            
+            /* 背景色 */
+            --color-bg-primary: #F8FAFC; /* Slate 50 */
+            --color-bg-secondary: #FFFFFF;
+            --color-bg-tertiary: #F1F5F9; /* Slate 100 */
+            
+            /* 文本色 */
+            --color-text-primary: #1E293B; /* Slate 800 */
+            --color-text-secondary: #475569; /* Slate 600 */
+            --color-text-tertiary: #64748B; /* Slate 500 */
+            
+            /* 边框色 */
+            --color-border: #E2E8F0; /* Slate 200 */
+            
+            /* 统一的阴影系统 */
+            --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.07);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.12);
+            
+            /* 间距系统 */
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            
+            /* 统一的圆角系统 */
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            
+            /* 字体系统 */
+            --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
+            --font-size-xs: 12px;
+            --font-size-sm: 14px;
+            --font-size-base: 16px;
+            --font-size-lg: 18px;
+            --font-size-xl: 24px;
+            --font-size-2xl: 30px;
+            
+            /* 过渡动画 */
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* 悬停效果 */
+            --hover-card-bg: #EFF6FF; /* Blue 50 */
+            --hover-button-bg: #EFF6FF; /* Blue 50 */
+            --hover-link-bg: #EFF6FF; /* Blue 50 */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family-base);
+            background: #F8FAFC;
+            color: var(--color-text-primary);
+            min-height: 100vh;
+        }
+
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: var(--spacing-lg);
+            padding-top: var(--spacing-xl);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-md);
+            object-fit: cover;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.12);
+        }
+
+        .logo-text {
+            font-size: var(--font-size-lg);
+            font-weight: 700;
+            color: var(--color-primary);
+            letter-spacing: -0.2px;
+        }
+
+        .back-links {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            color: var(--color-primary);
+            text-decoration: none;
+            font-size: var(--font-size-sm);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--radius-md);
+            transition: all var(--transition-base);
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            background: var(--hover-link-bg);
+            transform: translateX(-2px);
+        }
+
+        .back-link svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .article-title {
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: var(--spacing-sm);
+            letter-spacing: -0.3px;
+        }
+
+        .article-subtitle {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .solution-card {
+            background: #FFFFFF;
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.04);
+            border: 1px solid #E2E8F0;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .solution-section {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .solution-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: var(--spacing-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: var(--color-primary);
+            border-radius: 2px;
+        }
+
+        .solution-step {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+            padding: var(--spacing-md) var(--spacing-lg);
+            background: #F8FAFC;
+            border-radius: var(--radius-lg);
+            border: 1px solid #E2E8F0;
+            transition: all var(--transition-base);
+        }
+
+        .solution-step:hover {
+            background: #EFF6FF;
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+
+        .solution-step:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+            color: white;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            flex-shrink: 0;
+            box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-weight: 600;
+            margin-bottom: var(--spacing-xs);
+            color: var(--color-text-primary);
+            letter-spacing: -0.1px;
+        }
+
+        .step-desc {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+        }
+
+        .solution-tips {
+            background: rgba(16, 185, 129, 0.08);
+            border-left: 3px solid var(--color-success);
+            padding: var(--spacing-lg);
+            border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+            margin-top: var(--spacing-lg);
+        }
+
+        .tips-title {
+            font-weight: 600;
+            color: #047857;
+            margin-bottom: var(--spacing-sm);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .tips-title svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .tips-content {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+        }
+
+        /* 加载指示器 */
+        .loading-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 40px 0;
+            color: var(--color-text-tertiary);
+            font-size: var(--font-size-sm);
+        }
+        .loading-indicator .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            animation: dot-bounce 1.2s ease-in-out infinite;
+        }
+        .loading-indicator .dot:nth-child(2) { animation-delay: 0.2s; }
+        .loading-indicator .dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes dot-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        /* 富文本内容中图片自适应 */
+        .rich-content { overflow-x: hidden; }
+        .rich-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--radius-md);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        .rich-content img.broken-img {
+            display: block;
+            width: 100%;
+            max-width: 400px;
+            height: 120px;
+            background: #f3f4f6;
+            border: 1px dashed #d1d5db;
+            border-radius: var(--radius-md);
+            position: relative;
+            object-fit: none;
+        }
+        .rich-content .img-placeholder {
+            display: block;
+            width: 100%;
+            max-width: 400px;
+            padding: 40px 20px;
+            background: #f9fafb;
+            border: 1px dashed #d1d5db;
+            border-radius: var(--radius-md);
+            text-align: center;
+            color: var(--color-text-tertiary);
+            font-size: var(--font-size-sm);
+            line-height: 1.6;
+        }
+
+        /* 懒加载图片容器 */
+        .rich-content .img-lazy-placeholder {
+            position: relative;
+            width: 100%;
+            background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+            background-size: 200% 100%;
+            animation: lazy-shimmer 1.5s ease-in-out infinite;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+        }
+
+        /* 懒加载图片样式 */
+        .rich-content img.lazy-image {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .rich-content img.lazy-image:not([data-src]) {
+            opacity: 1;
+        }
+        @keyframes lazy-shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .contact-section {
+            text-align: center;
+            padding: var(--spacing-xl);
+            background: #FFFFFF;
+            border-radius: var(--radius-xl);
+            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.04);
+            border: 1px solid #E2E8F0;
+        }
+
+        .contact-title {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+            letter-spacing: -0.2px;
+        }
+
+        .contact-desc {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-lg);
+            line-height: 1.6;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+            color: white;
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: var(--font-size-base);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            box-shadow: 0 2px 4px rgba(59, 130, 246, 0.15), 0 4px 12px rgba(59, 130, 246, 0.15);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.2), 0 8px 20px rgba(59, 130, 246, 0.2);
+        }
+
+        .btn-primary svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* 问题解决确认区域 */
+        .feedback-section {
+            background: #FFFFFF;
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.04);
+            border: 1px solid #E2E8F0;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .feedback-header {
+            text-align: center;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .feedback-title {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            color: var(--color-text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-sm);
+            letter-spacing: -0.2px;
+        }
+
+        .feedback-title svg {
+            width: 22px;
+            height: 22px;
+            color: var(--color-primary);
+        }
+
+        .feedback-hint {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+            padding: 12px 16px;
+            background: #EFF6FF;
+            border: 1px solid #DBEAFE;
+            border-radius: var(--radius-lg);
+            color: var(--color-text-primary);
+        }
+
+        .feedback-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .btn-resolved {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            padding: 14px 24px;
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: white;
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: var(--font-size-base);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            box-shadow: 0 2px 4px rgba(16, 185, 129, 0.15), 0 4px 12px rgba(16, 185, 129, 0.15);
+        }
+
+        .btn-resolved:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(16, 185, 129, 0.2), 0 8px 20px rgba(16, 185, 129, 0.2);
+        }
+
+        .btn-resolved svg { width: 18px; height: 18px; }
+
+        .btn-unresolved {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            padding: 14px 24px;
+            background: #ffffff;
+            color: var(--color-text-secondary);
+            border: 1.5px solid #E2E8F0;
+            border-radius: var(--radius-lg);
+            font-size: var(--font-size-base);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+
+        .btn-unresolved:hover {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+            background: var(--hover-button-bg);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
+        }
+
+        .btn-unresolved svg { width: 18px; height: 18px; }
+
+        /* 联系客服展开区域 */
+        .contact-panel {
+            display: none;
+            margin-top: var(--spacing-lg);
+            padding-top: var(--spacing-lg);
+            border-top: 1px solid #E2DDD3;
+            text-align: center;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .contact-panel.show { display: block; }
+
+        .contact-panel-title {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .contact-panel-desc {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-lg);
+            line-height: 1.6;
+        }
+
+        /* 解决成功反馈 */
+        .success-feedback {
+            display: none;
+            text-align: center;
+            padding: var(--spacing-lg);
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .success-feedback.show { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .success-icon {
+            width: 64px;
+            height: 64px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--spacing-md);
+        }
+
+        .success-icon svg { width: 32px; height: 32px; color: #10B981; }
+
+        .success-text { font-size: var(--font-size-lg); font-weight: 600; color: #10B981; margin-bottom: var(--spacing-xs); }
+        .success-desc { font-size: var(--font-size-sm); color: var(--color-text-tertiary); }
+
+        .footer {
+            text-align: center;
+            padding: var(--spacing-xl);
+            font-size: var(--font-size-sm);
+            color: var(--color-text-tertiary);
+        }
+    </style>
+</head>
+<body>
+    <main class="main-container" role="main">
+        <!-- Logo -->
+        <div class="logo">
+            <img src="20260613-010553.jpg" alt="Logo" class="logo-icon">
+            <span class="logo-text">MTDS常见问题自查助手</span>
+        </div>
+
+        <!-- Back Links -->
+        <div class="back-links">
+            <a href="index.html" class="back-link" id="backToHome">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"/>
+                </svg>
+                返回首页
+            </a>
+            <a href="#" class="back-link" id="backToSubquestion">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"/>
+                </svg>
+                返回上级
+            </a>
+        </div>
+
+        <!-- Solution Content -->
+        <h1 class="article-title" id="solutionTitle">解决方案</h1>
+        <p class="article-subtitle" id="solutionSubtitle">以下是针对您问题的详细解决方案</p>
+        <section class="solution-card" id="solutionContent">
+            <div class="loading-indicator" id="solutionLoading">
+                <span>正在加载解决方案</span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+            <!-- Solution will be populated by JavaScript -->
+        </section>
+
+        <!-- 问题解决确认 -->
+        <section class="feedback-section" id="feedbackSection">
+            <div class="feedback-header">
+                <h2 class="feedback-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    问题解决确认
+                </h2>
+                <div class="feedback-hint">
+                    请确认你已经按照前面的步骤完成操作。<br>
+                    如果问题已经解决，请点击「问题已解决」；<br>
+                    如果问题仍未解决，请点击「仍有问题」获取进一步支持。
+                </div>
+            </div>
+
+            <!-- 按钮区域 -->
+            <div class="feedback-buttons" id="feedbackButtons">
+                <button class="btn-resolved" id="btnResolved">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    是，问题已解决
+                </button>
+                <button class="btn-unresolved" id="btnUnresolved">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                    否，问题未解决，联系服务台
+                </button>
+            </div>
+
+            <!-- 联系客服区域已移除，点击「否」将直接跳转服务台链接 -->
+
+            <!-- 解决成功反馈（默认隐藏） -->
+            <div class="success-feedback" id="successFeedback">
+                <div class="success-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div class="success-text">问题已解决</div>
+                <div class="success-desc">感谢您的使用，祝您工作顺利！</div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>MTDS常见问题自查助手 - 为您提供专业的解决方案</p>
+        </footer>
+    </main>
+
+    <script>
+        // 应用外观设置（从 localStorage 读取）
+        (function() {
+            try {
+                var saved = localStorage.getItem('qaui_appearance_settings');
+                if (!saved) return;
+                var s = JSON.parse(saved);
+                if (s.hoverCardBg) document.documentElement.style.setProperty('--hover-card-bg', s.hoverCardBg);
+                if (s.hoverButtonBg) document.documentElement.style.setProperty('--hover-button-bg', s.hoverButtonBg);
+                if (s.hoverLinkBg) document.documentElement.style.setProperty('--hover-link-bg', s.hoverLinkBg);
+            } catch(e) {}
+        })();
+
+        // ========== 数据存储模块 ==========
+        const DataStore = {
+            questions: [],
+            currentQuestion: null,
+
+            // 加载问题列表（从静态 JSON，含 content）
+            async load() {
+                try {
+                    const res = await fetch(window.DATA_BASE + '/questions.json');
+                    this.questions = await res.json() || [];
+                } catch (error) {
+                    console.error('数据加载失败:', error);
+                    this.questions = [];
+                }
+            },
+
+            // 加载单条问题详情（从已加载的静态列表中查找）
+            async loadQuestionDetail(id) {
+                try {
+                    // 确保列表已加载
+                    if (this.questions.length === 0) {
+                        await this.load();
+                    }
+                    this.currentQuestion = this.questions.find(q => q.id === id) || null;
+                    return this.currentQuestion;
+                } catch (error) {
+                    console.error('加载问题详情失败:', error);
+                    return null;
+                }
+            },
+
+            getQuestionById(id) {
+                return this.questions.find(q => q.id === id) || null;
+            },
+            
+            getChildrenByParent(parentId) {
+                return this.questions.filter(q => q.parentId === parentId).sort((a, b) => a.order - b.order);
+            }
+        };
+
+        // ========== 图标库与匹配函数 ==========
+        const richIconLibrary = {
+            question: '<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+            wrench:   '<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>',
+            bag:      '<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>',
+            truck:    '<rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>',
+            package:  '<line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>',
+            clock:    '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+            star:     '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+            heart:    '<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>',
+            tag:      '<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>',
+            phone:    '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>',
+            refresh:  '<polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>',
+            file:     '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>',
+            folder:   '<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>',
+            info:     '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>',
+            list:     '<line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>',
+            link:     '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>',
+            home:     '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+            user:     '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+            money:    '<rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/><line x1="6" y1="12" x2="6.01" y2="12"/><line x1="18" y1="12" x2="18.01" y2="12"/>'
+        };
+
+        // 根据问题内容匹配图标和配色
+        function getQuestionIconAndColor(title, isDir) {
+            var t = (title || '').toLowerCase();
+            if (isDir) {
+                return { icon: 'folder', colors: ['#8B5CF6', '#6366F1'] };
+            }
+            var rules = [
+                { keys: ['订单', '购买', '下单', '购物', '单据'], icon: 'bag', colors: ['#F59E0B', '#3B82F6'] },
+                { keys: ['退款', '退货', '换货', '退换', '更换', '返回'], icon: 'refresh', colors: ['#F59E0B', '#EF4444'] },
+                { keys: ['保修', '维修', '售后', '处理'], icon: 'wrench', colors: ['#10B981', '#3B82F6'] },
+                { keys: ['物流', '配送', '发货', '快递', '运输', '包裹'], icon: 'package', colors: ['#3B82F6', '#06B6D4'] },
+                { keys: ['安装', '预约', '上门', '时间', '安排'], icon: 'clock', colors: ['#8B5CF6', '#EC4899'] },
+                { keys: ['产品', '规格', '材质', '说明', '信息', '咨询'], icon: 'question', colors: ['#3B82F6', '#8B5CF6'] },
+                { keys: ['价格', '优惠', '折扣', '价钱', '促销', '活动'], icon: 'tag', colors: ['#F97316', '#F59E0B'] },
+                { keys: ['支付', '付款', '金额', '费用'], icon: 'money', colors: ['#10B981', '#8B5CF6'] },
+                { keys: ['客服', '联系', '电话', '反馈', '投诉'], icon: 'phone', colors: ['#06B6D4', '#3B82F6'] },
+                { keys: ['保养', '维护', '清洗', '保护'], icon: 'heart', colors: ['#EC4899', '#F43F5E'] },
+                { keys: ['用户', '账户', '账号', '登录', '注册'], icon: 'user', colors: ['#6366F1', '#8B5CF6'] }
+            ];
+            for (var i = 0; i < rules.length; i++) {
+                var rule = rules[i];
+                for (var j = 0; j < rule.keys.length; j++) {
+                    if (t.indexOf(rule.keys[j]) !== -1) {
+                        return { icon: rule.icon, colors: rule.colors };
+                    }
+                }
+            }
+            return { icon: 'file', colors: ['#475569', '#3B82F6'] };
+        }
+
+        // URL 参数解析
+        function getParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                category: params.get('category') || null,
+                question: params.get('question') || null
+            };
+        }
+
+        // 预处理富文本内容，将大 base64 图片替换为懒加载占位符（不预先解码，避免阻塞）
+        function preprocessRichContent(html) {
+            if (!html) return html;
+            
+            // 匹配 <img> 标签中的 base64 图片
+            const base64ImgRegex = /<img([^>]+)src="(data:image\/[^;]+;base64,[^"]+)"([^>]*)>/gi;
+            
+            let imageIndex = 0;
+            const processedHtml = html.replace(base64ImgRegex, (match, before, src, after) => {
+                if (src.length > 10000) {
+                    imageIndex++;
+                    const placeholderId = `lazy-img-${imageIndex}`;
+                    // 使用默认宽高比 16:9（截图常用比例），避免预先解码图片
+                    return `<div class="img-lazy-placeholder" id="${placeholderId}" style="padding-top:56.25%" data-src="${src}"></div>`;
+                }
+                return match;
+            });
+            
+            return processedHtml;
+        }
+        
+        // 图片懒加载 + 错误处理（通过独立 API 获取图片）
+        function setupImageLoading(container, questionId) {
+            const placeholders = container.querySelectorAll('.img-lazy-placeholder');
+            
+            const lazyLoad = () => {
+                placeholders.forEach(placeholder => {
+                    if (placeholder.dataset.loaded === 'true') return;
+                    
+                    const rect = placeholder.getBoundingClientRect();
+                    const isInViewport = rect.top < window.innerHeight * 1.5 && rect.bottom > 0;
+                    
+                    if (isInViewport) {
+                        const imgKey = placeholder.dataset.imgKey;
+                        if (imgKey) {
+                            const img = document.createElement('img');
+                            // 阶段1：图片仍走 Render API
+                            img.src = window.API_BASE + '/api/questions/' + questionId + '/image/' + imgKey;
+                            img.style.position = 'absolute';
+                            img.style.top = '0';
+                            img.style.left = '0';
+                            img.style.width = '100%';
+                            img.style.height = '100%';
+                            img.style.objectFit = 'contain';
+                            img.style.opacity = '0';
+                            img.style.transition = 'opacity 0.3s ease';
+                            
+                            img.onload = () => {
+                                img.style.opacity = '1';
+                            };
+                            
+                            img.onerror = () => {
+                                placeholder.innerHTML = '<div class="img-placeholder">&#128247; 图片加载失败<br><span style="font-size:11px;">请稍后刷新页面重试</span></div>';
+                            };
+                            
+                            placeholder.appendChild(img);
+                            placeholder.dataset.loaded = 'true';
+                        }
+                    }
+                });
+            };
+            
+            // 初始加载一次
+            setTimeout(lazyLoad, 50);
+            // 滚动时加载
+            window.addEventListener('scroll', lazyLoad, { passive: true });
+            // 窗口大小改变时加载
+            window.addEventListener('resize', lazyLoad);
+        }
+        
+        function replaceBrokenImage(img) {
+            const placeholder = document.createElement('div');
+            placeholder.className = 'img-placeholder';
+            placeholder.innerHTML = '&#128247; 图片加载失败<br><span style="font-size:11px;">请稍后刷新页面重试</span>';
+            img.parentNode.replaceChild(placeholder, img);
+        }
+
+        // 渲染解决方案
+        async function renderSolution() {
+            const { question, category } = getParams();
+            const loadingEl = document.getElementById('solutionLoading');
+            
+            await DataStore.load();
+            
+            const titleEl = document.getElementById('solutionTitle');
+            const subtitleEl = document.getElementById('solutionSubtitle');
+            const contentEl = document.getElementById('solutionContent');
+            const backLinkEl = document.getElementById('backToSubquestion');
+
+            // 如果没找到问题ID，显示提示
+            if (!question) {
+                titleEl.textContent = '请选择问题';
+                subtitleEl.textContent = '请从问题列表选择要查看的问题';
+                contentEl.innerHTML = `
+                    <div class="solution-section">
+                        <div class="solution-tips">
+                            <div class="tips-title">提示</div>
+                            <div class="tips-content">请从问题列表选择要查看的问题。</div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // 查找问题（从轻量列表获取基本信息）
+            var q = DataStore.getQuestionById(question);
+
+            if (!q) {
+                titleEl.textContent = '问题不存在';
+                subtitleEl.textContent = '无法找到指定的问题';
+                contentEl.innerHTML = `
+                    <div class="solution-section">
+                        <div class="solution-tips">
+                            <div class="tips-title">提示</div>
+                            <div class="tips-content">无法找到指定的问题，请返回重新选择。</div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            // 如果是文章类型，通过详情接口获取完整内容（含 base64 图片）
+            if (q.attribute === 'article') {
+                var detail = await DataStore.loadQuestionDetail(question);
+                if (detail && detail.content) {
+                    q = detail; // 用详情数据覆盖（包含 content）
+                }
+            }
+            
+            // 返回上级：根据父级动态计算
+            if (category) {
+                if (q.parentId && q.parentId !== 'root') {
+                    backLinkEl.href = 'subquestion.html?category=' + category + '&path=' + q.parentId;
+                } else {
+                    backLinkEl.href = 'subquestion.html?category=' + category;
+                }
+            }
+
+            // 更新页面标题
+            titleEl.textContent = q.title;
+            subtitleEl.textContent = '问题详情';
+            
+            // 渲染内容
+            if (q.attribute === 'article') {
+                if (q.contentType === 'hyperlink' && q.hyperlink) {
+                    contentEl.innerHTML = `
+                        <div class="solution-section">
+                            <h2 class="section-title">外部链接</h2>
+                            <div style="padding:16px;background:#f8f9fa;border-radius:8px;text-align:center;">
+                                <p style="margin-bottom:16px;">即将跳转到外部链接：</p>
+                                <a href="${q.hyperlink}" target="_blank" style="color:var(--color-primary);word-break:break-all;">${q.hyperlink}</a>
+                                <p style="margin-top:16px;font-size:14px;color:#666;">正在自动跳转...</p>
+                            </div>
+                        </div>
+                    `;
+                    setTimeout(() => {
+                        window.open(q.hyperlink, '_blank');
+                    }, 1500);
+                } else if (q.content) {
+                    contentEl.innerHTML = `
+                        <div class="solution-section">
+                            <h2 class="section-title">解决方案</h2>
+                            <div class="rich-content" style="line-height:1.8;font-size:16px;color:var(--color-text-primary);">${q.content}</div>
+                        </div>
+                    `;
+                    // 绑定图片懒加载和错误处理（图片已在服务端分离）
+                    setupImageLoading(contentEl, question);
+                } else {
+                    contentEl.innerHTML = `
+                        <div class="solution-section">
+                            <div class="solution-tips">
+                                <div class="tips-title">提示</div>
+                                <div class="tips-content">该问题暂无详细内容。</div>
+                            </div>
+                        </div>
+                    `;
+                }
+            } else {
+                // 目录类型 - 显示子目录/文章列表
+                const children = DataStore.getChildrenByParent(question);
+                if (children.length > 0) {
+                    const childHtml = children.map((child) => {
+                        const matched = getQuestionIconAndColor(child.title, child.attribute === 'directory');
+                        const iconPath = richIconLibrary[matched.icon] || richIconLibrary.file;
+                        const gradientBg = `linear-gradient(135deg, ${matched.colors[0]}1A 0%, ${matched.colors[1]}1A 100%)`;
+                        const strokeColor = matched.colors[0];
+                        return `
+                        <a href="solution.html?category=${category}&question=${child.id}" class="solution-step-link" style="display:flex;gap:var(--spacing-md);margin-bottom:var(--spacing-md);padding:var(--spacing-md) var(--spacing-lg);background:#F8FAFC;border-radius:var(--radius-lg);border:1px solid #E2E8F0;transition:all var(--transition-base);text-decoration:none;color:inherit;cursor:pointer;" onmouseover="this.style.background='#EFF6FF';this.style.borderColor='rgba(59,130,246,0.3)';" onmouseout="this.style.background='#F8FAFC';this.style.borderColor='#E2E8F0';">
+                            <div style="width:40px;height:40px;background:${gradientBg};border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="${strokeColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;">
+                                    ${iconPath}
+                                </svg>
+                            </div>
+                            <div style="flex:1;min-width:0;">
+                                <div style="font-weight:600;color:var(--color-primary);margin-bottom:2px;">
+                                    ${child.title}
+                                </div>
+                                <div style="font-size:var(--font-size-xs);color:var(--color-text-tertiary);">
+                                    ${child.attribute === 'directory' ? '目录' : '文章'}
+                                </div>
+                            </div>
+                            <div style="display:flex;align-items:center;justify-content:center;opacity:0.3;transition:all var(--transition-base);color:var(--color-text-tertiary);" class="step-arrow">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;height:18px;"><polyline points="9 18 15 12 9 6"/></svg>
+                            </div>
+                        </a>
+                    `;}).join('');
+                    
+                    contentEl.innerHTML = `
+                        <div class="solution-section">
+                            <h2 class="section-title">子问题列表</h2>
+                            ${childHtml}
+                        </div>
+                    `;
+                } else {
+                    contentEl.innerHTML = `
+                        <div class="solution-section">
+                            <div class="solution-tips">
+                                <div class="tips-title">提示</div>
+                                <div class="tips-content">该目录下暂无子问题。</div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        // ========== 初始化 ==========
+        var serviceDeskUrl = '';
+
+        // 页面加载时从静态 JSON 获取服务台链接
+        fetch(window.DATA_BASE + '/service-desk.json')
+            .then(function(res) { return res.json(); })
+            .then(function(data) { serviceDeskUrl = data.url || ''; })
+            .catch(function() { /* 静默失败 */ });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderSolution();
+
+            // 问题已解决
+            document.getElementById('btnResolved').addEventListener('click', function() {
+                document.getElementById('feedbackButtons').style.display = 'none';
+                document.getElementById('successFeedback').classList.add('show');
+                console.log('[反馈] 用户确认问题已解决');
+            });
+
+            // 问题未解决 → 直接跳转服务台
+            document.getElementById('btnUnresolved').addEventListener('click', function() {
+                if (serviceDeskUrl) {
+                    console.log('[反馈] 跳转服务台:', serviceDeskUrl);
+                    window.open(serviceDeskUrl, '_blank');
+                } else {
+                    alert('暂未配置服务台链接，请联系管理员。');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
