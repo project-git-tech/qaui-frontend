@@ -1675,7 +1675,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 
                                 const result = await response.json();
                                 if (result.success) {
-                                    // 使用 base64 dataUrl 存储图片，确保持久化（Render 文件系统不会丢失）
+                                    // 使用返回的图片 URL（GitHub Pages URL 或 base64 降级）
                                     const imgSrc = result.dataUrl || result.url;
                                     document.execCommand('insertImage', false, imgSrc);
                                     setTimeout(function() {
