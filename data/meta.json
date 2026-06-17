@@ -1,11 +1,10 @@
 {
-  "publishedAt": null,
-  "publishedBy": null,
-  "version": 0,
+  "publishedAt": "2026-06-17T15:17:14.942Z",
+  "publishedBy": "admin",
+  "version": 1781709457982,
   "stats": {
-    "types": 0,
-    "questions": 0,
-    "hotQuestions": 0
-  },
-  "note": "本地测试数据，实际发布由后端 /api/publish 接口生成"
+    "types": 1,
+    "questions": 9,
+    "hotQuestions": 2
+  }
 }
