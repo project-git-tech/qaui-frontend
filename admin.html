@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>欧派家居 - 后台配置管理系统</title>
     
-    <!-- 性能优化：提前建立与Render API的连接 -->
-    <link rel="preconnect" href="https://qa-platform-1-zat2.onrender.com">
-    <link rel="dns-prefetch" href="https://qa-platform-1-zat2.onrender.com">
+    <!-- 性能优化：提前建立与EdgeOne API的连接 -->
+    <link rel="preconnect" href="https://qa-platform-x2ufkzoj.edgeone.cool">
+    <link rel="dns-prefetch" href="https://qa-platform-x2ufkzoj.edgeone.cool">
     
     <!-- 引入Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -670,9 +670,9 @@ const DS = {
     async load() {
         try {
             const [typesRes, questionsRes, hotRes] = await Promise.all([
-                fetch(API + '/api/types'),
-                fetch(API + '/api/questions'),
-                fetch(API + '/api/hot')
+                fetch(API + '/types'),
+                fetch(API + '/questions'),
+                fetch(API + '/hot')
             ]);
             this.questionTypes = await typesRes.json() || [];
             this.questions = await questionsRes.json() || [];
@@ -705,7 +705,7 @@ const DS = {
             // 只保存被修改的数据
             this.questionTypes.forEach(t => {
                 if (t._modified) {
-                    requests.push(fetch(API + `/api/types/${t.id}`, {
+                    requests.push(fetch(API + `/types/${t.id}`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(t)
@@ -715,7 +715,7 @@ const DS = {
             
             this.questions.forEach(q => {
                 if (q._modified) {
-                    requests.push(fetch(API + `/api/questions/${q.id}`, {
+                    requests.push(fetch(API + `/questions/${q.id}`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(q)
@@ -726,7 +726,7 @@ const DS = {
             this.hotQuestions.forEach(h => {
                 if (h._modified || h._isNew) {
                     const method = h._isNew ? 'POST' : 'PUT';
-                    const url = h._isNew ? '/api/hot' : `/api/hot/${h.id}`;
+                    const url = h._isNew ? API + '/hot' : API + `/hot/${h.id}`;
                     requests.push(fetch(url, {
                         method: method,
                         headers: { 'Content-Type': 'application/json' },
@@ -752,7 +752,7 @@ const DS = {
     },
     async addQuestionType(type) {
         try {
-            const res = await fetch(API + '/api/types', {
+            const res = await fetch(API + '/types', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(type)
@@ -765,7 +765,7 @@ const DS = {
     },
     async updateQuestionType(type) {
         try {
-            const res = await fetch(API + `/api/types/${type.id}`, {
+            const res = await fetch(API + `/types/${type.id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(type)
@@ -778,7 +778,7 @@ const DS = {
     },
     async deleteQuestionType(id) {
         try {
-            await fetch(API + `/api/types/${id}`, {
+            await fetch(API + `/types/${id}`, {
                 method: 'DELETE'
             });
         } catch (error) {
@@ -788,7 +788,7 @@ const DS = {
     },
     async addQuestion(question) {
         try {
-            const res = await fetch(API + '/api/questions', {
+            const res = await fetch(API + '/questions', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(question)
@@ -801,7 +801,7 @@ const DS = {
     },
     async updateQuestion(question) {
         try {
-            const res = await fetch(API + `/api/questions/${question.id}`, {
+            const res = await fetch(API + `/questions/${question.id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(question)
@@ -814,7 +814,7 @@ const DS = {
     },
     async deleteQuestion(id) {
         try {
-            await fetch(API + `/api/questions/${id}`, {
+            await fetch(API + `/questions/${id}`, {
                 method: 'DELETE'
             });
         } catch (error) {
@@ -824,7 +824,7 @@ const DS = {
     },
     async addHotQuestion(hq) {
         try {
-            const res = await fetch(API + '/api/hot', {
+            const res = await fetch(API + '/hot', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(hq)
@@ -837,7 +837,7 @@ const DS = {
     },
     async updateHotQuestion(hq) {
         try {
-            const res = await fetch(API + `/api/hot/${hq.id}`, {
+            const res = await fetch(API + `/hot/${hq.id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(hq)
@@ -850,7 +850,7 @@ const DS = {
     },
     async deleteHotQuestion(id) {
         try {
-            await fetch(API + `/api/hot/${id}`, {
+            await fetch(API + `/hot/${id}`, {
                 method: 'DELETE'
             });
         } catch (error) {
@@ -1668,7 +1668,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 const formData = new FormData();
                                 formData.append('file', file);
                                 
-                                const response = await fetch(API + '/api/upload/image', {
+                                const response = await fetch(API + '/upload/image', {
                                     method: 'POST',
                                     body: formData
                                 });
@@ -1711,7 +1711,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // ========== 服务台链接管理 ==========
 async function loadServiceDeskUrl() {
     try {
-        const res = await fetch(API + '/api/service-desk');
+        const res = await fetch(API + '/service-desk');
         const data = await res.json();
         document.getElementById('serviceDeskUrl').value = data.url || '';
         document.getElementById('serviceDeskStatus').style.display = 'none';
@@ -1723,7 +1723,7 @@ async function loadServiceDeskUrl() {
 async function saveServiceDeskUrl() {
     const url = document.getElementById('serviceDeskUrl').value.trim();
     try {
-        await fetch(API + '/api/service-desk', {
+        await fetch(API + '/service-desk', {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ url })
@@ -1745,7 +1745,7 @@ async function checkPublishStatus() {
     status.textContent = '正在检查配置...';
     configBox.style.display = 'none';
     try {
-        const res = await fetch(API + '/api/publish/status');
+        const res = await fetch(API + '/publish/status');
         const data = await res.json();
         status.textContent = '';
         configBox.style.display = 'block';
@@ -1783,7 +1783,7 @@ async function publishToLive() {
     result.style.display = 'none';
 
     try {
-        const res = await fetch(API + '/api/publish', {
+        const res = await fetch(API + '/publish', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' }
         });

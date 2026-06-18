@@ -37,8 +37,8 @@
         ].join(' | '), 'ok');
 
         // 步骤3: 加载types
-        log('步骤3: 正在加载 ' + API + '/api/types ...', '');
-        fetch(API + '/api/types')
+        log('步骤3: 正在加载 ' + API + '/types ...', '');
+        fetch(API + '/types')
             .then(function(r) { return r.json(); })
             .then(function(data) {
                 log('步骤3结果: types加载成功, 数量=' + data.length, 'ok');
@@ -50,8 +50,8 @@
             .catch(function(e) { log('步骤3失败: ' + e.message, 'err'); });
 
         function loadQuestions() {
-            log('步骤4: 正在加载 ' + API + '/api/questions ...', '');
-            fetch(API + '/api/questions')
+            log('步骤4: 正在加载 ' + API + '/questions ...', '');
+            fetch(API + '/questions')
                 .then(function(r) { return r.json(); })
                 .then(function(data) {
                     log('步骤4结果: questions加载成功, 数量=' + data.length, 'ok');
